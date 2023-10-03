@@ -77,15 +77,6 @@ class TestsList extends BaseProvider
 			error_code = await this.runTestMethod(arr[0], arr[1]);
 		}
 		
-		if (error_code == 1)
-		{
-			io::print( io::color("green", "OK") );
-		}
-		else
-		{
-			io::print( io::color("red", "Fail") );
-		}
-		
 		return error_code;
 	}
 	

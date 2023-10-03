@@ -20,6 +20,8 @@ namespace Runtime.Unit.Commands;
 
 use Runtime.io;
 use Runtime.Console.BaseCommand;
+use Runtime.Unit.TestsList;
+use Runtime.Unit.UnitTest;
 
 
 class TestAll extends BaseCommand
@@ -42,8 +44,32 @@ class TestAll extends BaseCommand
 	 */
 	async int run()
 	{
-		io::print( io::color("green", "OK") );
-		return static::SUCCESS;
+		int error_code = static::SUCCESS;
+		
+		/* List all tests */
+		io::print("Run all tests:");
+		TestsList tests = @.provider(classof TestsList);
+		
+		for (int i=0; i<tests.count(); i++)
+		{
+			UnitTest test = tests.get(i);
+			error_code = await tests.runTestByName(test.name);
+			if (error_code != static::SUCCESS)
+			{
+				break;
+			}
+		}
+		
+		if (error_code == 1)
+		{
+			io::print( io::color("green", "OK") );
+		}
+		else
+		{
+			io::print( io::color("red", "Fail") );
+		}
+		
+		return error_code;
 	}
 	
 	

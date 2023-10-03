@@ -63,7 +63,16 @@ class TestRun extends BaseCommand
 		{
 			/* Run current test */
 			TestsList tests = @.provider(classof TestsList);
-			int error_code = await tests.runTestByName(test_name);
+			error_code = await tests.runTestByName(test_name);
+			
+			if (error_code == 1)
+			{
+				io::print( io::color("green", "OK") );
+			}
+			else
+			{
+				io::print( io::color("red", "Fail") );
+			}
 		}
 		
 		return error_code;
