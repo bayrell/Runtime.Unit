@@ -30,7 +30,7 @@ class TestRun extends BaseCommand
 	/**
 	 * Returns name
 	 */
-	static string getName() => "test:run";
+	static string getName() => "test::run";
 	
 	
 	/**

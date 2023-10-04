@@ -30,7 +30,7 @@ class TestAll extends BaseCommand
 	/**
 	 * Returns name
 	 */
-	static string getName() => "test:all";
+	static string getName() => "test::all";
 	
 	
 	/**
