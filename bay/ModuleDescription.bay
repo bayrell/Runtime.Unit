@@ -20,7 +20,7 @@ namespace Runtime.Unit;
 
 use Runtime.Entity.Provider;
 use Runtime.Console.Annotations.ConsoleCommand;
-use Runtime.Unit.TestsList;
+use Runtime.Unit.TestProvider;
 
 
 class ModuleDescription
@@ -58,7 +58,7 @@ class ModuleDescription
 	[
 		new ConsoleCommand("Runtime.Unit.Commands.TestAll"),
 		new ConsoleCommand("Runtime.Unit.Commands.TestRun"),
-		new Provider(classof TestsList, new TestsList),
+		new Provider(classof TestProvider, new TestProvider),
 	];
 	
 }

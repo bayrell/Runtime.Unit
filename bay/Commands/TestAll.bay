@@ -20,7 +20,7 @@ namespace Runtime.Unit.Commands;
 
 use Runtime.io;
 use Runtime.Console.BaseCommand;
-use Runtime.Unit.TestsList;
+use Runtime.Unit.TestProvider;
 use Runtime.Unit.UnitTest;
 
 
@@ -48,7 +48,7 @@ class TestAll extends BaseCommand
 		
 		/* List all tests */
 		io::print("Run all tests:");
-		TestsList tests = @.provider(classof TestsList);
+		TestProvider tests = @.provider(classof TestProvider);
 		
 		for (int i=0; i<tests.count(); i++)
 		{

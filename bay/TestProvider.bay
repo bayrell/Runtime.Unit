@@ -27,10 +27,11 @@ use Runtime.Unit.Test;
 use Runtime.Unit.UnitTest;
 
 
-class TestsList extends BaseProvider
+class TestProvider extends BaseProvider
 {
     Collection<string> tests_list = [];
     
+	
     /**
 	 * Start provider
 	 */
