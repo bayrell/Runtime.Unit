@@ -136,6 +136,7 @@ class TestsList extends BaseProvider
 			if (result != 1)
 			{
 				error_code = -1;
+				break;
 			}
 		}
 		
