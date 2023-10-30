@@ -42,7 +42,7 @@ class TestAll extends BaseCommand
 	/**
 	 * Run task
 	 */
-	async int run()
+	async static int run()
 	{
 		int error_code = static::SUCCESS;
 		

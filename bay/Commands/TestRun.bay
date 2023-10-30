@@ -42,7 +42,7 @@ class TestRun extends BaseCommand
 	/**
 	 * Run task
 	 */
-	async int run()
+	async static int run()
 	{
 		string test_name = @.cli_args[2];
 		int error_code = static::SUCCESS;
