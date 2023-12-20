@@ -22,6 +22,7 @@ use Runtime.io;
 use Runtime.lib;
 use Runtime.BaseProvider;
 use Runtime.BaseStruct;
+use Runtime.Callback;
 use Runtime.Exceptions.AssertException;
 use Runtime.Unit.Test;
 use Runtime.Unit.UnitTest;
@@ -83,42 +84,44 @@ class TestProvider extends BaseProvider
 	
 	
 	/**
+	 * Returns true if TestMethod
+	 */
+	bool isTestMethod(Dict method_info)
+	{
+		Collection annotations = method_info["annotations"];
+		if (annotations)
+		{
+			for (int j=0; j<annotations.count(); j++)
+			{
+				BaseStruct annotation = annotations[j];
+				if (annotation instanceof Test)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	
+	/**
 	 * Returns all test methods
 	 */
 	Collection getTestMethods(string class_name)
 	{
-		fn isTestMethod = bool (Dict method_info)
-		{
-			Collection annotations = method_info["annotations"];
-			if (annotations)
-			{
-				for (int j=0; j<annotations.count(); j++)
-				{
-					BaseStruct annotation = annotations[j];
-					if (annotation instanceof Test)
-					{
-						return true;
-					}
-				}
-			}
-			return false;
-		};
+		Callback getMethodsList = new Callback(class_name, "getMethodsList");
+		Callback getMethodInfoByName = new Callback(class_name, "getMethodInfoByName");
 		
-		Vector result = new Vector();
-		Collection<string> methods = rtl::applyMethod(class_name, "getMethodsList");
-		for (int i=0; i<methods.count(); i++)
-		{
-			string method_name = methods.get(i);
-			Dict method_info = rtl::applyMethod(
-				class_name, "getMethodInfoByName", [method_name]
-			);
-			if (isTestMethod(method_info))
+		Collection<string> methods = rtl::apply(getMethodsList);
+		methods = methods.filter(
+			bool (string method_name) use (getMethodInfoByName)
 			{
-				result.pushValue(method_name);
+				Dict method_info = rtl::apply(getMethodInfoByName, [method_name]);
+				return static::isTestMethod(method_info);
 			}
-		}
+		);
 		
-		return result.toCollection();
+		return methods;
 	}
 	
 	
@@ -153,7 +156,8 @@ class TestProvider extends BaseProvider
 		int error_code = 0;
 		try
 		{
-			await rtl::applyAsyncMethod(class_name, method_name);
+			Callback callback = new Callback(class_name, method_name);
+			await rtl::apply(callback);
 			error_code = 1;
 			io::print(class_name ~ "::" ~ method_name ~ " " ~ io::color("green", "Ok"));
 		}
