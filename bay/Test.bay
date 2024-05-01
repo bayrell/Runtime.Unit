@@ -18,7 +18,7 @@
 
 namespace Runtime.Unit;
 
-use Runtime.Entity;
+use Runtime.Entity.Entity;
 
 
 class Test extends Entity
