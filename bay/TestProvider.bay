@@ -63,9 +63,10 @@ class TestProvider extends BaseProvider
 	/**
 	 * Run
 	 */
-	static void run(string test_name = "")
+	static async void run(string test_name = "")
 	{
-		TestProvider provider = @.provider(static::getClassName());
+		TestProvider provider = new TestProvider();
+		await provider.start();
 		
 		if (test_name == "")
 		{
@@ -78,7 +79,7 @@ class TestProvider extends BaseProvider
 			return;
 		}
 		
-		provider.runTestByName(test_name);
+		await provider.runTestByName(test_name);
 	}
 	
 	
