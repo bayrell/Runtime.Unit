@@ -23,7 +23,6 @@ use Runtime.Entity;
 
 class AssertHelper
 {
-	
 	/**
 	 * Check equals of types
 	 */
@@ -122,5 +121,4 @@ class AssertHelper
 			}
 		}
 	}
-	
 }

@@ -70,6 +70,4 @@ class TestAll extends BaseCommand
 		
 		return error_code;
 	}
-	
-	
 }

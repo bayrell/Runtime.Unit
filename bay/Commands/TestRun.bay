@@ -76,6 +76,4 @@ class TestRun extends BaseCommand
 		
 		return error_code;
 	}
-	
-	
 }

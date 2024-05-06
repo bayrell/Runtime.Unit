@@ -61,6 +61,28 @@ class TestProvider extends BaseProvider
 	
 	
 	/**
+	 * Run
+	 */
+	static void run(string test_name = "")
+	{
+		TestProvider provider = @.provider(static::getClassName());
+		
+		if (test_name == "")
+		{
+			io::print("List of all tests:");
+			for (int i=0; i<provider.count(); i++)
+			{
+				UnitTest test = provider.get(i);
+				io::print( (i + 1) ~ ") " ~ test.name );
+			}
+			return;
+		}
+		
+		provider.runTestByName(test_name);
+	}
+	
+	
+	/**
 	 * Run test
 	 */
 	async int runTestByName(string test_name)
@@ -71,12 +93,12 @@ class TestProvider extends BaseProvider
 		if (arr.count() == 1)
 		{
 			/* Run all test in class */
-			error_code = await this.runTestClass(arr[0]);
+			error_code = await this.runTestClass(arr.get(0));
 		}
 		else
 		{
 			/* Run specific test */
-			error_code = await this.runTestMethod(arr[0], arr[1]);
+			error_code = await this.runTestMethod(arr.get(0), arr.get(1));
 		}
 		
 		return error_code;
@@ -86,14 +108,14 @@ class TestProvider extends BaseProvider
 	/**
 	 * Returns true if TestMethod
 	 */
-	bool isTestMethod(Dict method_info)
+	static bool isTestMethod(Dict method_info)
 	{
 		Collection annotations = method_info["annotations"];
 		if (annotations)
 		{
 			for (int j=0; j<annotations.count(); j++)
 			{
-				BaseStruct annotation = annotations[j];
+				BaseStruct annotation = annotations.get(j);
 				if (annotation instanceof Test)
 				{
 					return true;
@@ -136,7 +158,7 @@ class TestProvider extends BaseProvider
 		for (int i=0; i<methods.count(); i++)
 		{
 			string method_name = methods.get(i);
-			int result = this.runTestMethod(class_name, method_name);
+			int result = await this.runTestMethod(class_name, method_name);
 			if (result != 1)
 			{
 				error_code = -1;

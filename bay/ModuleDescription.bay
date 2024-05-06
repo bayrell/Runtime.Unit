@@ -25,7 +25,6 @@ use Runtime.Unit.TestProvider;
 
 class ModuleDescription
 {
-	
 	/**
 	 * Returns module name
 	 * @return string

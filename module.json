@@ -2,6 +2,13 @@
 	"name": "Runtime.Unit",
 	"assets":
 	[
+		"Commands/TestAll.bay",
+		"Commands/TestRun.bay",
+		"AssertHelper.bay",
+		"Test.bay",
+		"TestProvider.bay",
+		"UnitTest.bay",
+		"ModuleDescription.bay"
 	],
 	"src": "./bay",
 	"dest":
