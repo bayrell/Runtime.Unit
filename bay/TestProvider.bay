@@ -24,6 +24,7 @@ use Runtime.BaseProvider;
 use Runtime.BaseStruct;
 use Runtime.Callback;
 use Runtime.Exceptions.AssertException;
+use Runtime.Exceptions.ItemNotFound;
 use Runtime.Unit.Test;
 use Runtime.Unit.UnitTest;
 
@@ -180,9 +181,21 @@ class TestProvider extends BaseProvider
 		try
 		{
 			Callback callback = new Callback(class_name, method_name);
-			await rtl::apply(callback);
-			error_code = 1;
-			io::print(class_name ~ "::" ~ method_name ~ " " ~ io::color("green", "Ok"));
+			if (not callback.exists())
+			{
+				var obj = rtl::newInstance(class_name);
+				callback = new Callback(obj, method_name);
+			}
+			if (callback.exists())
+			{
+				await rtl::apply(callback);
+				error_code = 1;
+				io::print(class_name ~ "::" ~ method_name ~ " " ~ io::color("green", "Ok"));
+			}
+			else
+			{
+				throw new ItemNotFound(class_name ~ "::" ~ method_name, "Method");
+			}
 		}
 		catch (AssertException e)
 		{
