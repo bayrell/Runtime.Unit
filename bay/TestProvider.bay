@@ -168,6 +168,11 @@ class TestProvider extends BaseProvider
 			}
 		}
 		
+		if (error_code == 1)
+		{
+			io::print(io::color("green", "Success"));
+		}
+		
 		return error_code;
 	}
 	
