@@ -85,6 +85,27 @@ class TestProvider extends BaseProvider
 	
 	
 	/**
+	 * Run
+	 */
+	static async void runAll()
+	{
+		TestProvider provider = new TestProvider();
+		await provider.start();
+		
+		for (int i=0; i<provider.count(); i++)
+		{
+			UnitTest test = provider.get(i);
+			io::print("Run " ~ test.name);
+			int error_code = await provider.runTestByName(test.name);
+			if (error_code != 1)
+			{
+				return;
+			}
+		}
+	}
+	
+	
+	/**
 	 * Run test
 	 */
 	async int runTestByName(string test_name)
@@ -210,5 +231,4 @@ class TestProvider extends BaseProvider
 		}
 		return error_code;
 	}
-	
 }

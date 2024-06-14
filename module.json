@@ -7,6 +7,9 @@
 		"TestProvider.bay",
 		"UnitTest.bay"
 	],
+	"groups": [
+		"test"
+	],
 	"src": "./bay",
 	"dest":
 	{
