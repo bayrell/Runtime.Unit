@@ -18,7 +18,6 @@
 
 namespace Runtime.Unit;
 
-use Runtime.io;
 use Runtime.lib;
 use Runtime.BaseProvider;
 use Runtime.BaseStruct;
@@ -39,7 +38,7 @@ class TestProvider extends BaseProvider
 	 */
 	async void start()
 	{
-		this.tests_list = @.entities.filter( lib::isInstance(classof UnitTest) );
+		this.tests_list = @.getEntities(classof UnitTest);
     }
     
 	
@@ -71,11 +70,11 @@ class TestProvider extends BaseProvider
 		
 		if (test_name == "")
 		{
-			io::print("List of all tests:");
+			rtl::print("List of all tests:");
 			for (int i=0; i<provider.count(); i++)
 			{
 				UnitTest test = provider.get(i);
-				io::print( (i + 1) ~ ") " ~ test.name );
+				rtl::print( (i + 1) ~ ") " ~ test.name );
 			}
 			return;
 		}
@@ -95,7 +94,7 @@ class TestProvider extends BaseProvider
 		for (int i=0; i<provider.count(); i++)
 		{
 			UnitTest test = provider.get(i);
-			io::print("Run " ~ test.name);
+			rtl::print("Run " ~ test.name);
 			int error_code = await provider.runTestByName(test.name);
 			if (error_code != 1)
 			{
@@ -157,11 +156,11 @@ class TestProvider extends BaseProvider
 		Callback getMethodsList = new Callback(class_name, "getMethodsList");
 		Callback getMethodInfoByName = new Callback(class_name, "getMethodInfoByName");
 		
-		Collection<string> methods = rtl::apply(getMethodsList);
+		Collection<string> methods = getMethodsList.apply();
 		methods = methods.filter(
 			bool (string method_name) use (getMethodInfoByName)
 			{
-				Dict method_info = rtl::apply(getMethodInfoByName, [method_name]);
+				Dict method_info = getMethodInfoByName.apply([method_name]);
 				return static::isTestMethod(method_info);
 			}
 		);
@@ -191,7 +190,7 @@ class TestProvider extends BaseProvider
 		
 		if (error_code == 1)
 		{
-			io::print(io::color("green", "Success"));
+			rtl::print(rtl::color("green", "Success"));
 		}
 		
 		return error_code;
@@ -216,7 +215,7 @@ class TestProvider extends BaseProvider
 			{
 				await rtl::apply(callback);
 				error_code = 1;
-				io::print(class_name ~ "::" ~ method_name ~ " " ~ io::color("green", "Ok"));
+				rtl::print(class_name ~ "::" ~ method_name ~ " " ~ rtl::color("green", "Ok"));
 			}
 			else
 			{
@@ -225,8 +224,8 @@ class TestProvider extends BaseProvider
 		}
 		catch (AssertException e)
 		{
-			io::print(class_name ~ "::" ~ method_name ~ " " ~
-				io::color("red", "Error: " ~ e.getErrorMessage()));
+			rtl::print(class_name ~ "::" ~ method_name ~ " " ~
+				rtl::color("red", "Error: " ~ e.getErrorMessage()));
 			error_code = e.getErrorCode();
 		}
 		return error_code;
