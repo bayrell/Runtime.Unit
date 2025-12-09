@@ -21,7 +21,7 @@ namespace Runtime.Unit;
 use Runtime.lib;
 use Runtime.BaseProvider;
 use Runtime.BaseStruct;
-use Runtime.Callback;
+use Runtime.Method;
 use Runtime.Exceptions.AssertException;
 use Runtime.Exceptions.ItemNotFound;
 use Runtime.Unit.Test;
@@ -130,18 +130,14 @@ class TestProvider extends BaseProvider
 	/**
 	 * Returns true if TestMethod
 	 */
-	static bool isTestMethod(Dict method_info)
+	static bool isTestMethod(Vector annotations)
 	{
-		Collection annotations = method_info["annotations"];
-		if (annotations)
+		for (int j=0; j<annotations.count(); j++)
 		{
-			for (int j=0; j<annotations.count(); j++)
+			BaseStruct annotation = annotations.get(j);
+			if (annotation instanceof Test)
 			{
-				BaseStruct annotation = annotations.get(j);
-				if (annotation instanceof Test)
-				{
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;
@@ -153,8 +149,8 @@ class TestProvider extends BaseProvider
 	 */
 	Collection getTestMethods(string class_name)
 	{
-		Callback getMethodsList = new Callback(class_name, "getMethodsList");
-		Callback getMethodInfoByName = new Callback(class_name, "getMethodInfoByName");
+		Method getMethodsList = new Method(class_name, "getMethodsList");
+		Method getMethodInfoByName = new Method(class_name, "getMethodInfoByName");
 		
 		Collection<string> methods = getMethodsList.apply();
 		methods = methods.filter(
@@ -205,15 +201,18 @@ class TestProvider extends BaseProvider
 		int error_code = 0;
 		try
 		{
-			Callback callback = new Callback(class_name, method_name);
+			Method callback = new Method(class_name, method_name);
 			if (not callback.exists())
 			{
 				var obj = rtl::newInstance(class_name);
-				callback = new Callback(obj, method_name);
+				callback = new Method(obj, method_name);
 			}
 			if (callback.exists())
 			{
-				await rtl::apply(callback);
+				var res = callback.apply();
+				#ifcode JAVASCRIPT then
+				if (res instanceof Promise) await res;
+				#endif
 				error_code = 1;
 				rtl::print(class_name ~ "::" ~ method_name ~ " " ~ rtl::color("green", "Ok"));
 			}
