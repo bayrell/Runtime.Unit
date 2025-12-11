@@ -59,7 +59,7 @@ class ModuleDescription
 		new ConsoleCommand("Runtime.Unit.Commands.TestAll"),
 		new ConsoleCommand("Runtime.Unit.Commands.TestRun"),
 		#endif
-		new Provider(classof TestProvider, new TestProvider),
+		new Provider(classof TestProvider),
 	];
 	
 }
