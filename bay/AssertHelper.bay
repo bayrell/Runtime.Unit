@@ -18,7 +18,7 @@
 
 namespace Runtime.Unit;
 
-use Runtime.Entity;
+use Runtime.BaseObject;
 
 
 class AssertHelper
@@ -43,6 +43,19 @@ class AssertHelper
 		string type2 = rtl::getType(value1);
 		string message = "Type mismatch. Needs \"" ~ type1 ~ "\". Exists \"" ~ type2 ~ "\"";
 		rtl::assert(type1 == type2, message);
+	}
+	
+	
+	/**
+	 * Check class name
+	 */
+	static void equalClass(var value, string class_name)
+	{
+		string message = "Class \"" ~ class_name ~ "\" not found";
+		bool is_object = value instanceof BaseObject or
+			value instanceof Map or value instanceof Vector;
+		rtl::assert(is_object, message);
+		rtl::assert(value::getClassName() == class_name, message);
 	}
 	
 	
