@@ -55,7 +55,7 @@ class ModuleDescription
 	 */
 	pure Collection<Dict> entities() => 
 	[
-		#ifdef BACKED then
+		#ifdef BACKEND then
 		new ConsoleCommand("Runtime.Unit.Commands.TestAll"),
 		new ConsoleCommand("Runtime.Unit.Commands.TestRun"),
 		#endif

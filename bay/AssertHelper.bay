@@ -84,6 +84,26 @@ class AssertHelper
 	
 	
 	/**
+	 * Check not equals of values
+	 */
+	static void notEqualValue(var value1, var value2, string message = "")
+	{
+		if (message == "") message = "\"" ~ value1 ~ "\" == \"" ~ value2 ~ "\"";
+		rtl::assert(value1 !== value2, message);
+	}
+	
+	
+	/**
+	 * Check if value1 is greater than value2
+	 */
+	static void greaterThan(var value1, var value2, string message = "")
+	{
+		if (message == "") message = "\"" ~ value1 ~ "\" is not greater than \"" ~ value2 ~ "\"";
+		rtl::assert(value1 > value2, message);
+	}
+	
+	
+	/**
 	 * Check equals of two vectors
 	 */
 	static void equalVector(Vector c1, Vector c2)
